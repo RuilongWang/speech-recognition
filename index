@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div>
+	command 1 = Ellbogen mehr<br/>command 2 = Ellbogen weniger<br/>command 3 = Hand mehr<br/>command 4 = Hand weniger<br/>command 5 = halt<br/>stop = stop recording<br/>     
+        <input type="button" id="start" value="start" onclick="start();"/>
+	<input type="button" id="stop" value="stop" onclick="stop();"/>
+        <input type="button" id="close" value="close" onclick="closeConn();"/>
+    </div>
+    <div id="content"></div>
+ 
+<script type="text/javascript">
+    var socket = new WebSocket("ws://127.0.0.1:1234");
+
+ 
+     
+    socket.onopen = function () {
+        
+ 
+        var newTag = document.createElement('div');
+        newTag.innerHTML = "【connected】";
+        document.getElementById('content').appendChild(newTag);
+    };
+ 
+    socket.onmessage = function (event) {
+        
+        var response = event.data;
+        var newTag = document.createElement('div');
+        newTag.innerHTML = response;
+        document.getElementById('content').appendChild(newTag);
+    };
+ 
+    socket.onclose = function (event) {
+        
+        var newTag = document.createElement('div');
+        newTag.innerHTML = "【closed】";
+        document.getElementById('content').appendChild(newTag);
+    };
+ 
+    function start() {
+	var newTag = document.createElement('div');
+	newTag.innerHTML = "【please say the command】";
+	document.getElementById('content').appendChild(newTag);
+        var txt = "start";
+        socket.send(txt);
+	
+    }
+
+    function stop() {
+	var newTag = document.createElement('div');
+	newTag.innerHTML = "【please say the command】";
+	document.getElementById('content').appendChild(newTag);
+        var txt = "stop";
+        socket.send(txt);
+	
+    }
+
+    function closeConn() {
+        socket.close();
+        var newTag = document.createElement('div');
+        newTag.innerHTML = "【closed】";
+        document.getElementById('content').appendChild(newTag);
+    }
+ 
+</script>
+</body>
+</html>
